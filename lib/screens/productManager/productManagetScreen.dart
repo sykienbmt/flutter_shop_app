@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/ProductsProvider.dart';
+import 'package:shop_app/screens/editProductScreen/editProductScreen.dart';
 import 'package:shop_app/screens/productManager/widgets/productManagerItem.dart';
 import 'package:shop_app/widgets/appDrawer.dart';
 
@@ -21,7 +22,9 @@ class _ProductManagerScreenState extends State<ProductManagerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Product manager"),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
+        actions: [IconButton(onPressed: () {
+          Navigator.of(context).pushNamed(EditProductScreen.routerName);
+        }, icon: Icon(Icons.add))],
       ),
       drawer: AppDrawer(),
       body: Padding(
