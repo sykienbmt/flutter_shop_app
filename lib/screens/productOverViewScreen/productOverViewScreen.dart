@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/ProductsProvider.dart';
@@ -20,10 +22,38 @@ class ProductOverViewScreen extends StatefulWidget {
 
 class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   var isShowFavorites = false;
+  var isInit = true;
+  var isLoading = false;
+
+  // @override
+  // void initState() {
+  //   Future.delayed(Duration.zero).then(
+  //       (_) => {Provider.of<ProductsProvider>(context).fetchAndSetProducts()});
+  //   super.initState();
+  // }
+
+  @override
+  void didChangeDependencies() {
+    if (isInit) {
+      setState(() {
+        isLoading = true;
+      });
+      Provider.of<ProductsProvider>(context)
+          .fetchAndSetProducts()
+          .then((value) => {
+                setState(() {
+                  isLoading = false;
+                }),
+              });
+    }
+    isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartProviderData = Provider.of<CartProvider>(context);
-
+    print(isLoading);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Products"),
@@ -51,16 +81,22 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
                 ]),
           ),
           Badge(
-            IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {
-              Navigator.of(context).pushNamed(CartScreen.routerName);
-            }),
+            IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CartScreen.routerName);
+                }),
             cartProviderData.getCountItemsCart.toString(),
             Colors.red,
           )
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductGrid(isShowFavorites),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGrid(isShowFavorites),
     );
   }
 }

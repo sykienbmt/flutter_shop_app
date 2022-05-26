@@ -4,6 +4,8 @@ import 'package:shop_app/providers/cartProvider.dart';
 import 'package:shop_app/providers/ordersProvider.dart';
 import 'package:shop_app/screens/cartScreen/widgets/cartItemRender.dart';
 
+import 'widgets/orderButton.dart';
+
 class CartScreen extends StatelessWidget {
   static const routerName = '/cart';
   const CartScreen({Key? key}) : super(key: key);
@@ -38,16 +40,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<OrdersProvider>(context,listen: false).addOrder(
-                        cartProvider.items.values.toList(),
-                        cartProvider.totalAmount,
-                      );
-                      cartProvider.clear();
-                    },
-                    child: const Text("ORDER NOW"),
-                  )
+                  OrderButton(cartProvider: cartProvider)
                 ],
               ),
             ),
@@ -73,3 +66,5 @@ class CartScreen extends StatelessWidget {
     );
   }
 }
+
+

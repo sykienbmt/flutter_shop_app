@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class Product with ChangeNotifier{
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+class Product with ChangeNotifier {
   final String id;
   final String title;
   final String description;
@@ -14,11 +17,28 @@ class Product with ChangeNotifier{
     required this.description,
     required this.price,
     required this.imageUrl,
-    this.isFavorite=false,
+    this.isFavorite = false,
   });
 
-  void changeStatus(){
-    isFavorite=!isFavorite;
+  Future<void> changeStatus() async {
+    final oldStatus = isFavorite;
+    isFavorite = !isFavorite;
     notifyListeners();
+    final url =
+        'https://flutter-crud-31d86-default-rtdb.firebaseio.com/products/${id}.json';
+
+    try {
+      http.patch(Uri.parse(url),
+          body: json.encode({
+            'isFavorite': isFavorite,
+            'title': title,
+            'description': description,
+            'price': price,
+            'imageUrl': imageUrl
+          }));
+    } catch (e) {
+      isFavorite=oldStatus;
+      notifyListeners();
+    }
   }
 }
