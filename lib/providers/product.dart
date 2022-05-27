@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop_app/providers/authProvider.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -20,12 +21,12 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Future<void> changeStatus() async {
+  Future<void> changeStatus(String token) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
     final url =
-        'https://flutter-crud-31d86-default-rtdb.firebaseio.com/products/${id}.json';
+        'https://flutter-crud-31d86-default-rtdb.firebaseio.com/userFavorites/${AuthProvider.userId}/$id.json?auth=$token';
 
     try {
       http.patch(Uri.parse(url),

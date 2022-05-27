@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:shop_app/providers/authProvider.dart';
 import 'package:shop_app/providers/cartProvider.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,15 +27,19 @@ class OrdersProvider with ChangeNotifier {
     return [..._orders];
   }
 
+  // final String authToken;
+
+  // OrdersProvider(this.authToken,this._orders);
+
   Future<void> fetchAndSetOrders() async {
     final url =
-        'https://flutter-crud-31d86-default-rtdb.firebaseio.com/orders.json';
+        'https://flutter-crud-31d86-default-rtdb.firebaseio.com/orders.json?auth=${AuthProvider.token}';
 
     try {
       final response = await http.get(Uri.parse(url));
       List<OrderItem> loaderOrders = [];
 
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>?;
       if (extractedData == null) {
         return;
       }
@@ -63,7 +69,7 @@ class OrdersProvider with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> listItem, double total) async {
     final url =
-        'https://flutter-crud-31d86-default-rtdb.firebaseio.com/orders.json';
+        'https://flutter-crud-31d86-default-rtdb.firebaseio.com/orders.json?auth=${AuthProvider.token}';
 
     final timeStamp = DateTime.now();
 

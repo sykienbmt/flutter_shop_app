@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/authProvider.dart';
 import 'package:shop_app/providers/cartProvider.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/screens/productDetail/productDetail.dart';
@@ -12,6 +13,8 @@ class ProductItem extends StatelessWidget {
 
     final product = Provider.of<Product>(context);
     final cartProvider = Provider.of<CartProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+
 
     final snackBar = SnackBar(
       content: const Text('Add to Cart done!'),
@@ -40,7 +43,7 @@ class ProductItem extends StatelessWidget {
             icon: Icon(product.isFavorite? Icons.favorite: Icons.favorite_border),
             color: Theme.of(context).accentColor,
             onPressed: () {
-              product.changeStatus();
+              product.changeStatus(authProvider.getToken!);
             },
           ),
           title: Text(
