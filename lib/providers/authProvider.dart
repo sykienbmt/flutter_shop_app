@@ -30,14 +30,6 @@ class AuthProvider with ChangeNotifier {
     return null;
   }
 
-  // static String? getTokenFromAuth(){
-  //   if(expiryDate !=null && expiryDate!.isAfter(DateTime.now()) && _token != null){
-  //     return _token!;
-  //   }
-
-  //   return null;
-  // }
-
   Future<void> authenticate(
       String email, String password, String urlSegment) async {
     final url =
@@ -75,23 +67,6 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  // Future<bool> tryAutoLogin() async {
-  //   final local = await SharedPreferences.getInstance();
-  //   if (!local.containsKey('userData')) {
-  //     return false;
-  //   }
-  //   final extractedData =
-  //       json.decode(local.getString('userData')!) as Map<String, dynamic>;
-  //   final date = DateTime.parse(extractedData['expired']);
-  //   if (date.isAfter(DateTime.now())) {
-  //     return false;
-  //   }
-  //   token = extractedData['token'];
-  //   userId = extractedData['userId'];
-  //   expiryDate = date;
-  //   notifyListeners();
-  //   return true;
-  // }
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
@@ -107,7 +82,6 @@ class AuthProvider with ChangeNotifier {
     userId = extractedUserData['userId'];
     expiryDate = date;
     notifyListeners();
-    // _autoLogout();
     return true;
   }
 
